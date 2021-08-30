@@ -1,10 +1,10 @@
 class Config():
      DEBUG = True
 
-db_name = 'matches.db'
+db_name = 'postgres'
 
 class DevelopmentConfig(Config):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + db_name
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:hi@localhost:5432/" + db_name
 
 config_settings = {
         'development': DevelopmentConfig
