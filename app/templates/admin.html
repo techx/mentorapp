@@ -1,0 +1,38 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">team id</th>
+        <th scope="col">mentor id</th>
+      </tr>
+    </thead>
+      {% for match in matches %}
+      <tr>
+      <th scope="row">{{match.team_id}}</th>
+      <td>{{match.mentor_id}}
+      </td>
+      <td>
+         <button onclick="document.getElementById('{{match.team_id}}').style.display='block'">Edit</button>
+          <div id="{{match.team_id}}" style="display:none;" class="modal">
+            <div class="modal-content">
+              <span class="spanbutton"
+                onclick="document.getElementById('{{match.team_id}}').style.display='none'">&times;</span>
+              <form action="/mentor/{{match.team_id}}" method="post" id="helo" enctype="application/json"
+                style="display:block;">
+                <b>Team {{match.team_id}}</b><br><br>
+                <label class="formlabel">Mentor Id: </label>
+                <input type="text" name="name"><br><br>
+                <button>submit</button>
+              </form>
+            </div>
+          </div>
+      </td>
+      <td>
+        <form action="/mentor/delete/{{match.team_id}}" method="post" id="helo" enctype="application/json">
+            <button>Delete</button>
+        </form>
+      </td>
+    </tr>
+	{% endfor %}
+</table>
+
+    
