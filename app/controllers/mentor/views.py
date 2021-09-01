@@ -8,16 +8,36 @@ def test():
 
 @mentor_bp.route('/<teamID>', methods=['GET'])
 def get_mentor(teamID):
-    return teamID, 200
+    from app.models import Matches
+    display = ''
+    row = Matches.query.filter_by(team_id=teamID).first()
+    if row:
+        display = str(row.mentor_id)
+    return display, 200
 
 @mentor_bp.route('/<teamID>/<mentorID>', methods=['POST'])
 def add_mentor(teamID, mentorID):
-    return teamID, 200
+    from app.models import Matches
+    display = ''
+    row = Matches.query.filter_by(team_id=teamID).first()
+    if not row:
+        Matches.populate({teamID: mentorID})
+        display = str(mentorID)
+    return display, 200
 
-@mentor_bp.route('/<teamID>/<newMentorID>', methods=['PUT'])
-def update_mentor(teamID, newMentorID):
-    return newMentorID, 200
+@mentor_bp.route('/<teamID>', methods=['POST'])
+def update_mentor(teamID):
+    from app.models import Matches
+    data = request.form
+    print(data)
+    for elem in data:
+        Matches.populate({teamID: data[elem]})
+    matches = Matches.query.all()
+    return render_template('admin.html', matches=matches)
 
-@mentor_bp.route('/<teamID>', methods=['DELETE'])
+@mentor_bp.route('/delete/<teamID>', methods=['POST'])
 def delete_mentor(teamID):
-    return teamID, 200
+    from app.models import Matches
+    Matches.delete([teamID])
+    matches = Matches.query.all()
+    return render_template('admin.html', matches=matches), 200

@@ -1,9 +1,19 @@
 from flask import Blueprint, Response, request, jsonify, make_response, render_template, redirect, url_for
 
+
 admin_bp = Blueprint("admin", __name__, url_prefix='/admin')
 
-@admin_bp.route('/test', methods=['GET'])
-def test():
+
+@admin_bp.route('/reset', methods=['GET'])
+def reset():
+    from app.models import Matches
+    Matches.query.delete()
+    matches = Matches.query.all()
+    return render_template('admin.html', matches=matches), 200
+
+@admin_bp.route('/match', methods=['GET'])
+def match():
+    from app.models import Matches, TeamResponses, MentorResponses
 
     def create_numerical_rankings(team_prefs, mentor_prefs): 
         # team_prefs {'A': {'commitment': _, 'expertise': _, 'in person': _}, 'B': ...}
@@ -63,12 +73,12 @@ def test():
                     matches[current_team] = potential_mentor
         return matches
     
-    test_team = {'A': {'commitment': 3, 'expertise': 'cs', 'in person': True},
-                 'B': {'commitment': 2, 'expertise': 'cs', 'in person': True},
-                 'C': {'commitment': 4, 'expertise': 'cs', 'in person': True}}
-    test_mentor = {'a': {'commitment': 5, 'expertise': 'cs', 'in person': True},
-                   'b': {'commitment': 2, 'expertise': 'cs', 'in person': True},
-                   'c': {'commitment': 3, 'expertise': 'cs', 'in person': True}}
+    test_team = {1: {'commitment': 3, 'expertise': 'cs', 'in person': True},
+                 2: {'commitment': 2, 'expertise': 'cs', 'in person': True},
+                 3: {'commitment': 4, 'expertise': 'cs', 'in person': True}}
+    test_mentor = {11: {'commitment': 5, 'expertise': 'cs', 'in person': True},
+                   22: {'commitment': 2, 'expertise': 'cs', 'in person': True},
+                   33: {'commitment': 3, 'expertise': 'cs', 'in person': True}}
 
     team_order = create_numerical_rankings(test_team, test_mentor)
     mentor_order = create_numerical_rankings(test_mentor, test_team)
@@ -76,16 +86,23 @@ def test():
     print(mentor_order)
     print(stable_matching(team_order, mentor_order))
 
+    matches = stable_matching(team_order, mentor_order)
 
-    return "", 200
+    for team,mentor in matches.items():
+        Matches.populate({team: mentor})
 
-@admin_bp.route('/match', methods=['GET'])
-def match():
-    return "", 200
+    matches = Matches.query.all()
+    print(matches)
+    for elem in matches:
+        print(elem.team_id)
+        print(elem.mentor_id)
+    return render_template('admin.html', matches=matches), 200
 
-@admin_bp.route('/reset', methods=['GET'])
+@admin_bp.route('/', methods=['GET'])
 def reset_hackers():
-    return "", 200
+    from app.models import Matches
+    matches = Matches.query.all()
+    return render_template('admin.html', matches=matches), 200
 
 @admin_bp.route('/export_to_csv', methods=['GET'])
 def export_to_csv():
