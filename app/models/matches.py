@@ -35,6 +35,11 @@ class Matches(db.Model):
         db.session.commit()
 
     @classmethod
+    def deleteAll(self):
+        db.session.query(Matches).delete()
+        db.session.commit()
+
+    @classmethod
     def serialize(self):
         data = {c.name: getattr(self, c.name) for c in self.__table__.columns}
         return data

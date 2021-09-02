@@ -29,7 +29,7 @@ class TeamResponses(db.Model):
         self.virtual = virtual
 
     def serialize(self):
-        data = {c.id: {'commitment': c.commitment, 'interest': c.interest, 'virtual': c.virtual} for c in self.__table__.columns}
+        data = {c.id: {'commitment': c.commitment, 'expertise': c.interest, 'in person': c.virtual} for c in self.__table__.columns}
         return data
 
     def save(self):

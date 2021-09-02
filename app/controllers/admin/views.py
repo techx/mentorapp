@@ -8,7 +8,7 @@ admin_bp = Blueprint("admin", __name__, url_prefix='/admin')
 @admin_bp.route('/reset', methods=['GET'])
 def reset():
     from app.models import Matches
-    Matches.query.delete()
+    Matches.deleteAll()
     matches = Matches.query.all()
     return render_template('admin.html', matches=matches), 200
 
@@ -74,15 +74,17 @@ def match():
                     matches[current_team] = potential_mentor
         return matches
     
-    test_team = {1: {'commitment': 3, 'expertise': 'cs', 'in person': True},
+    team = {1: {'commitment': 3, 'expertise': 'cs', 'in person': True},
                  2: {'commitment': 2, 'expertise': 'cs', 'in person': True},
                  3: {'commitment': 4, 'expertise': 'cs', 'in person': True}}
-    test_mentor = {11: {'commitment': 5, 'expertise': 'cs', 'in person': True},
+    mentor = {11: {'commitment': 5, 'expertise': 'cs', 'in person': True},
                    22: {'commitment': 2, 'expertise': 'cs', 'in person': True},
                    33: {'commitment': 3, 'expertise': 'cs', 'in person': True}}
+    #team = TeamResponses.serialize()
+    #mentor = MentorResponses.serialize()
+    team_order = create_numerical_rankings(team, mentor)
+    mentor_order = create_numerical_rankings(mentor, team)
 
-    team_order = create_numerical_rankings(test_team, test_mentor)
-    mentor_order = create_numerical_rankings(test_mentor, test_team)
     print(team_order)
     print(mentor_order)
     print(stable_matching(team_order, mentor_order))
