@@ -29,7 +29,7 @@ class MentorResponses(db.Model):
         self.virtual = virtual
 
     def serialize(self):
-        data = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        data = {c.id: {'commitment': c.commitment, 'interest': c.interest, 'virtual': c.virtual} for c in self.__table__.columns}
         return data
 
     def save(self):

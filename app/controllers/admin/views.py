@@ -107,13 +107,20 @@ def reset_hackers():
 
 @admin_bp.route('/export_to_csv', methods=['GET'])
 def export_to_csv():
-    from app.models import Matches
+    from app.models import Matches, TeamResponses, MentorResponses
     si = io.StringIO()
     cw = csv.writer(si)
     matches = Matches.query.all()
-    cw.writerow(['team_id', 'mentor_id'])
+    cw.writerow(['team name', 'team_id', 'mentor name', 'mentor_id'])
     for elem in matches:
-        cw.writerow([elem.team_id, elem.mentor_id])
+        teamName, mentorName = None, None
+        teamRow = TeamResponses.query.filter_by(id=elem.team_id).first()
+        mentorRow = MentorResponses.query.filter_by(id=elem.mentor_id).first()
+        if teamRow:
+            teamName = teamRow.name
+        if mentorRow:
+            mentorName = mentorRow.name
+        cw.writerow([teamName, elem.team_id, mentorName, elem.mentor_id])
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename=export.csv"
     output.headers["Content-type"] = "text/csv"
