@@ -1,5 +1,6 @@
 from flask import Blueprint, Response, request, jsonify, make_response, render_template, redirect, url_for
-
+import io
+import csv
 
 admin_bp = Blueprint("admin", __name__, url_prefix='/admin')
 
@@ -106,7 +107,17 @@ def reset_hackers():
 
 @admin_bp.route('/export_to_csv', methods=['GET'])
 def export_to_csv():
-    return "", 200
+    from app.models import Matches
+    si = io.StringIO()
+    cw = csv.writer(si)
+    matches = Matches.query.all()
+    cw.writerow(['team_id', 'mentor_id'])
+    for elem in matches:
+        cw.writerow([elem.team_id, elem.mentor_id])
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output, 200
 
 @admin_bp.route('/import_from_feather', methods=['GET'])
 def import_from_feather():
