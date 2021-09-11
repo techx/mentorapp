@@ -4,6 +4,24 @@ import csv
 
 admin_bp = Blueprint("admin", __name__, url_prefix='/admin')
 
+@admin_bp.route('/', methods=['GET'])
+def reset_hackers():
+    from app.models import Matches
+    matches = Matches.query.all()
+    return render_template('admin.html', matches=matches), 200
+
+@admin_bp.route('/email', methods=['GET'])
+def test():
+    from app.utils import send_email
+    from app.models import Matches, TeamResponses, MentorResponses
+    matches = Matches.query.all()
+    send_email('test', " ", " ")
+    # for match in matches:
+    #     team_emails = TeamResponses.query.filter_by(id=match).first()
+    #     mentor_email = MentorResponses.query.filter_by(id=matches[match]).first()
+    #     send_email('test', mentor_email, team_emails)
+    matches = Matches.query.all()
+    return render_template('admin.html', matches=matches), 200
 
 @admin_bp.route('/reset', methods=['GET'])
 def reset():
@@ -101,12 +119,6 @@ def match():
         print(elem.mentor_id)
     return render_template('admin.html', matches=matches), 200
 
-@admin_bp.route('/', methods=['GET'])
-def reset_hackers():
-    from app.models import Matches
-    matches = Matches.query.all()
-    return render_template('admin.html', matches=matches), 200
-
 @admin_bp.route('/export_to_csv', methods=['GET'])
 def export_to_csv():
     from app.models import Matches, TeamResponses, MentorResponses
@@ -127,7 +139,3 @@ def export_to_csv():
     output.headers["Content-Disposition"] = "attachment; filename=export.csv"
     output.headers["Content-type"] = "text/csv"
     return output, 200
-
-@admin_bp.route('/import_from_feather', methods=['GET'])
-def import_from_feather():
-    return "", 200
