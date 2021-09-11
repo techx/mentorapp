@@ -4,24 +4,6 @@ import csv
 
 admin_bp = Blueprint("admin", __name__, url_prefix='/admin')
 
-@admin_bp.route('/', methods=['GET'])
-def reset_hackers():
-    from app.models import Matches
-    matches = Matches.query.all()
-    return render_template('admin.html', matches=matches), 200
-
-@admin_bp.route('/email', methods=['GET'])
-def test():
-    from app.utils import send_email
-    from app.models import Matches, TeamResponses, MentorResponses
-    matches = Matches.query.all()
-    send_email('test', " ", " ")
-    # for match in matches:
-    #     team_emails = TeamResponses.query.filter_by(id=match).first()
-    #     mentor_email = MentorResponses.query.filter_by(id=matches[match]).first()
-    #     send_email('test', mentor_email, team_emails)
-    matches = Matches.query.all()
-    return render_template('admin.html', matches=matches), 200
 
 @admin_bp.route('/reset', methods=['GET'])
 def reset():
@@ -110,7 +92,14 @@ def match():
     matches = stable_matching(team_order, mentor_order)
 
     for team,mentor in matches.items():
-        Matches.populate({team: mentor})
+        team_row = TeamResponses.query.filter_by(id=team).first()
+        mentor_row = MentorResponses.query.filter_by(id=mentor).first()
+        team_email, mentor_email = None, None
+        if team_row:
+            team_email = team_email.email
+        if mentor_row:
+            mentor_email = mentor_email.email
+        Matches.populate({team: [mentor, team_email, mentor_email]})
 
     matches = Matches.query.all()
     print(matches)
@@ -119,23 +108,26 @@ def match():
         print(elem.mentor_id)
     return render_template('admin.html', matches=matches), 200
 
+@admin_bp.route('/', methods=['GET'])
+def reset_hackers():
+    from app.models import Matches
+    matches = Matches.query.all()
+    return render_template('admin.html', matches=matches), 200
+
 @admin_bp.route('/export_to_csv', methods=['GET'])
 def export_to_csv():
     from app.models import Matches, TeamResponses, MentorResponses
     si = io.StringIO()
     cw = csv.writer(si)
     matches = Matches.query.all()
-    cw.writerow(['team name', 'team_id', 'mentor name', 'mentor_id'])
+    cw.writerow(['team email', 'team_id', 'mentor email', 'mentor_id'])
     for elem in matches:
-        teamName, mentorName = None, None
-        teamRow = TeamResponses.query.filter_by(id=elem.team_id).first()
-        mentorRow = MentorResponses.query.filter_by(id=elem.mentor_id).first()
-        if teamRow:
-            teamName = teamRow.name
-        if mentorRow:
-            mentorName = mentorRow.name
-        cw.writerow([teamName, elem.team_id, mentorName, elem.mentor_id])
+        cw.writerow([elem.team_email, elem.team_id, elem.mentor_email, elem.mentor_id])
     output = make_response(si.getvalue())
     output.headers["Content-Disposition"] = "attachment; filename=export.csv"
     output.headers["Content-type"] = "text/csv"
     return output, 200
+
+@admin_bp.route('/import_from_feather', methods=['GET'])
+def import_from_feather():
+    return "", 200

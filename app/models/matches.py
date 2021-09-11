@@ -14,6 +14,8 @@ class Matches(db.Model):
 
     team_id = Column(Integer, primary_key=True, nullable=False)
     mentor_id = Column(Integer)
+    team_email = Column(String)
+    mentor_email = Column(String)
 
     @classmethod
     def populate(self, data):
@@ -22,10 +24,14 @@ class Matches(db.Model):
             if not row:
                 row = Matches()
                 row.team_id= key
-                row.mentor_id= val
+                row.mentor_id= val[0]
+                row.team_email = val[1]
+                row.mentor_email = val[2]
                 db.session.add(row)
             else:
-                row.mentor_id = val
+                row.mentor_id = val[0]
+                row.team_email = val[1]
+                row.mentor_email = val[2]
         db.session.commit()
 
     @classmethod
@@ -41,7 +47,9 @@ class Matches(db.Model):
 
     @classmethod
     def serialize(self):
-        data = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        matches = db.session.query(Matches).all()
+        data = {c.team_id: [c.team_email, c.mentor_id, c.mentor_email] for c in matches}
+        print(data)
         return data
 
     @classmethod
