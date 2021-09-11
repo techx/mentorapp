@@ -7,7 +7,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = "postgresql://postgres:hellothere@localhost:5432/" + db_name
 
 class ProductionConfig(Config):
-    MAILGUN_API = 'c82809290d1ec763b71bed0697faf731-770f03c4-177eee34'
+    MAILGUN_API = ''
 
 config_settings = {
         'development': DevelopmentConfig,
