@@ -9,13 +9,13 @@ email_bp = Blueprint("email", __name__, url_prefix='/email')
 def test():
     from app.models import Matches
     from app import app
-    def send_email(email_type, mentor_email, team_emails):
+    def send_email(mentor_email, team_email):
         app.config.from_object(config_settings['production'])
         return requests.post(
             "https://api.mailgun.net/v3/my.hackmit.org/messages",
             auth=("api", app.config['MAILGUN_API']),
             data={"from": "Test User <mentor@my.hackmit.org>",
-                "to": ["vishruti@mit.edu", "vishruti721@gmail.com"],
+                "to": [mentor_email, team_email],
                 "subject": "test matches",
                 "text": "eeeeeeeee"})
 

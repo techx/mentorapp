@@ -29,7 +29,7 @@ def match():
                 in_person_team = team_prefs[team]['in person']
                 for mentor in mentor_prefs:
                     in_person_mentor = mentor_prefs[mentor]['in person']
-                    shared_expertise = set(team_prefs[team]['expertise']) & set(mentor_prefs[mentor]['expertise'])
+                    shared_expertise = team_prefs[team]['expertise'] & mentor_prefs[mentor]['expertise']
                     if (mentor_prefs[mentor]["commitment"] == commitment_level) and len(shared_expertise) and (in_person_team == in_person_mentor):
                         team_order[team].append(mentor)
                     elif (mentor_prefs[mentor]["commitment"] == commitment_level):
@@ -74,12 +74,12 @@ def match():
                     matches[current_team] = potential_mentor
         return matches
     
-    team = {1: {'commitment': 3, 'expertise': 'cs', 'in person': True},
-                 2: {'commitment': 2, 'expertise': 'cs', 'in person': True},
-                 3: {'commitment': 4, 'expertise': 'cs', 'in person': True}}
-    mentor = {11: {'commitment': 5, 'expertise': 'cs', 'in person': True},
-                   22: {'commitment': 2, 'expertise': 'cs', 'in person': True},
-                   33: {'commitment': 3, 'expertise': 'cs', 'in person': True}}
+    team = {1: {'commitment': 3, 'expertise': {'cs'}, 'in person': True},
+                 2: {'commitment': 2, 'expertise': {'cs'}, 'in person': True},
+                 3: {'commitment': 4, 'expertise': {'cs'}, 'in person': True}}
+    mentor = {11: {'commitment': 5, 'expertise': {'cs'}, 'in person': True},
+                   22: {'commitment': 2, 'expertise': {'cs'}, 'in person': True},
+                   33: {'commitment': 3, 'expertise': {'cs'}, 'in person': True}}
     #team = TeamResponses.serialize()
     #mentor = MentorResponses.serialize()
     team_order = create_numerical_rankings(team, mentor)
