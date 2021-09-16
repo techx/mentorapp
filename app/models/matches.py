@@ -49,7 +49,6 @@ class Matches(db.Model):
     def serialize(self):
         matches = db.session.query(Matches).all()
         data = {c.team_id: [c.team_email, c.mentor_id, c.mentor_email] for c in matches}
-        print(data)
         return data
 
     @classmethod

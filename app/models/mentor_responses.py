@@ -21,7 +21,7 @@ class MentorResponses(db.Model):
 
     @classmethod
     def populate(self, name, email, commitment, interest, virtual):
-        row = db.session.query(MentorResponses).filter_by(name=name).first()
+        row = db.session.query(MentorResponses).filter_by(name=name, email=email, commitment=commitment, interest=interest, virtual=virtual).first()
         if not row:
             row = MentorResponses()
             row.name = name
@@ -40,7 +40,7 @@ class MentorResponses(db.Model):
     @classmethod
     def serialize(self):
         all = db.session.query(MentorResponses).all()
-        data = {c.id: {'commitment': c.commitment, 'interest': set(c.interest.split(',')), 'virtual': c.virtual} for c in all}
+        data = {c.id: {'commitment': c.commitment, 'interest': set(c.interest.split(', ')), 'virtual': c.virtual} for c in all}
         return data
 
     @classmethod
@@ -48,3 +48,8 @@ class MentorResponses(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
+
+    @classmethod
+    def deleteAll(self):
+        db.session.query(MentorResponses).delete()
+        db.session.commit()

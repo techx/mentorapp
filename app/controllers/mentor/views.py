@@ -31,7 +31,6 @@ def add_mentor(teamID, mentorID):
 def update_mentor(teamID):
     from app.models import Matches
     data = request.form
-    print(data)
     for elem in data:
         Matches.populate({teamID: data[elem]})
     matches = Matches.query.all()
