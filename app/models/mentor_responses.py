@@ -17,7 +17,7 @@ class MentorResponses(db.Model):
     email = Column(Text)
     commitment = Column(Integer)
     interest = Column(Text)
-    virtual = Column(Text)
+    virtual = Column(Boolean)
 
     @classmethod
     def populate(self, name, email, commitment, interest, virtual):
