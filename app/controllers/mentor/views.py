@@ -44,21 +44,3 @@ def delete_mentor(teamID):
     matches = Matches.query.all()
     return render_template('admin.html', matches=matches), 200
 
-@mentor_bp.route('/get_responses_mentor', methods=['POST'])
-def get_from_csv():
-    from app.models import MentorResponses
-    content = request.files['csv']
-    stream = io.StringIO(content.stream.read().decode("UTF-8"), newline = None)
-    csv_input = csv.reader(stream)
-    counter = 0
-    for elem in csv_input:
-        if counter == 0: 
-            counter += 1
-            continue
-        else:
-            a = True if elem[5] == 'Virtual' else False
-            MentorResponses.populate(elem[1], elem[2], int(elem[3].split(':')[0]), elem[4], a)
-            counter += 1
-    data = MentorResponses.serialize()
-    print(data)
-    return "", 200
