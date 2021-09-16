@@ -3,12 +3,20 @@
       <tr>
         <th scope="col">team id</th>
         <th scope="col">mentor id</th>
+        <th scope="col">team email</th>
+        <th scope="col">mentor email</th>
       </tr>
     </thead>
       {% for match in matches %}
       <tr>
       <th scope="row">{{match.team_id}}</th>
       <td>{{match.mentor_id}}
+      </td>
+      <td>
+        {{match.team_email}}
+      </td>
+      <td>
+        {{match.mentor_email}}
       </td>
       <td>
          <button onclick="document.getElementById('{{match.team_id}}').style.display='block'">Edit</button>

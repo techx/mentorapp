@@ -5,6 +5,7 @@ from config import config_settings
 from app.controllers.admin.views import admin_bp
 from app.controllers.mentor.views import mentor_bp
 from app.controllers.landing.views import landing_bp
+from app.controllers.email.views import email_bp
 migrate = Migrate()
 db = None
 
@@ -21,4 +22,5 @@ def create_app():
     app.register_blueprint(admin_bp)
     app.register_blueprint(mentor_bp)
     app.register_blueprint(landing_bp)
+    app.register_blueprint(email_bp)
     return app

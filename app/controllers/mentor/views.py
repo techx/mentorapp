@@ -1,4 +1,6 @@
 from flask import Blueprint, Response, request, jsonify, make_response, render_template, redirect, url_for
+import io
+import csv
 
 mentor_bp = Blueprint("mentor", __name__, url_prefix='/mentor')
 
@@ -29,7 +31,6 @@ def add_mentor(teamID, mentorID):
 def update_mentor(teamID):
     from app.models import Matches
     data = request.form
-    print(data)
     for elem in data:
         Matches.populate({teamID: data[elem]})
     matches = Matches.query.all()
@@ -41,3 +42,4 @@ def delete_mentor(teamID):
     Matches.delete([teamID])
     matches = Matches.query.all()
     return render_template('admin.html', matches=matches), 200
+

@@ -14,25 +14,45 @@ class TeamResponses(db.Model):
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(Text)
-    members = Column(ARRAY(Text))
+    members = Column(Text)
     email = Column(Text)
     commitment = Column(Integer)
     interest = Column(Text)
     virtual = Column(Boolean)
 
+    @classmethod
     def populate(self, name, members, email, commitment, interest, virtual):
-        self.name = name
-        self.members = members
-        self.email = email
-        self.commitment = commitment
-        self.interest = interest
-        self.virtual = virtual
+        row = db.session.query(TeamResponses).filter_by(name=name, members=members, email=email, commitment=commitment, interest=interest, virtual=virtual).first()
+        if not row:
+            row = TeamResponses()
+            row.name = name
+            row.members = members
+            row.email = email
+            row.commitment = commitment
+            row.interest = interest
+            row.virtual = virtual
+            db.session.add(row)
+        else:
+            row.members = members
+            row.email = email
+            row.commitment = commitment
+            row.interest = interest
+            row.virtual = virtual
+        db.session.commit()
 
+    @classmethod
     def serialize(self):
-        data = {c.id: {'commitment': c.commitment, 'expertise': c.interest, 'in person': c.virtual} for c in self.__table__.columns}
+        all = db.session.query(TeamResponses).all()
+        data = {c.id: {'commitment': c.commitment, 'interest': set(c.interest.split(', ')), 'virtual': c.virtual} for c in all}
         return data
 
+    @classmethod
     def save(self):
         db.session.add(self)
         db.session.commit()
         return self
+
+    @classmethod
+    def deleteAll(self):
+        db.session.query(TeamResponses).delete()
+        db.session.commit()
