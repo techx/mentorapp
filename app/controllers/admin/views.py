@@ -139,7 +139,8 @@ def import_from_feather():
 
 @admin_bp.route('/get_responses', methods=['POST'])
 def get_from_csv():
-    from app.models import MentorResponses, TeamResponses
+    from app.models import MentorResponses, TeamResponses, Matches
+    print(request.data)
     mentor_content = request.files['mentor']
     stream = io.StringIO(mentor_content.stream.read().decode("UTF-8"), newline = None)
     csv_input = csv.reader(stream)
@@ -167,4 +168,7 @@ def get_from_csv():
             TeamResponses.populate(elem[1], elem[2], elem[3], int(elem[4].split(':')[0]), elem[5], a)
             counter += 1
     data = TeamResponses.serialize()
-    return "", 200
+    matches = Matches.query.all()
+    mentor = MentorResponses.query.all()
+    team = TeamResponses.query.all()
+    return render_template('admin.html', matches=matches, mentor=mentor, team=team), 200

@@ -1,5 +1,30 @@
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
 
+<form action="/admin/match" method="get" id="helo" enctype="application/json">
+  <button>Match</button>
+</form>
+<form action="/admin/reset" method="get" id="helo" enctype="application/json">
+  <button>Reset</button>
+</form>
+<form action="/email/send_emails" method="get" id="helo" enctype="application/json">
+  <button>Send Emails</button>
+</form>
+<button onclick="document.getElementById('uploadforms').style.display='block'">Upload Forms</button>
+            <div id="uploadforms" style="display:none;" class="modal">
+              <div class="modal-content">
+                <span class="spanbutton"
+                  onclick="document.getElementById('uploadforms').style.display='none'">&times;</span>
+                <form action="/admin/get_responses" method="post" id="helo" enctype="multipart/form-data"
+                  style="display:block;">
+                  <b>Upload Forms</b><br><br>
+                  <label class="formlabel">Mentor File: </label>
+                  <input type="file" name="mentor"><br>
+                  <label class="formlabel">Team File: </label>
+                  <input type="file" name="team"><br><br>
+                  <button>submit</button>
+                </form>
+              </div>
+            </div>
 
 <button onclick=matchestable()>Display Matches</button>
 

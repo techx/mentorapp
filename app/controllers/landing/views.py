@@ -4,4 +4,4 @@ landing_bp = Blueprint("", __name__)
 
 @landing_bp.route('/', methods=['GET'])
 def test():
-    return "hi", 200
+    return render_template('landing.html'), 200
