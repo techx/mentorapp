@@ -140,7 +140,9 @@ def import_from_feather():
 @admin_bp.route('/get_responses', methods=['POST'])
 def get_from_csv():
     from app.models import MentorResponses, TeamResponses, Matches
-    print(request.data)
+    Matches.deleteAll()
+    MentorResponses.deleteAll()
+    TeamResponses.deleteAll()
     mentor_content = request.files['mentor']
     stream = io.StringIO(mentor_content.stream.read().decode("UTF-8"), newline = None)
     csv_input = csv.reader(stream)
