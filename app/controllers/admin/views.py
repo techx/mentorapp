@@ -12,7 +12,9 @@ def reset():
     MentorResponses.deleteAll()
     TeamResponses.deleteAll()
     matches = Matches.query.all()
-    return render_template('admin.html', matches=matches), 200
+    team = TeamResponses.query.all()
+    mentor = MentorResponses.query.all()
+    return render_template('admin.html', matches=matches, team=team, mentor=mentor), 200
 
 @admin_bp.route('/match', methods=['GET'])
 def match():
@@ -105,13 +107,17 @@ def match():
         Matches.populate({team: [mentor, team_email, mentor_email]})
 
     matches = Matches.query.all()
-    return render_template('admin.html', matches=matches), 200
+    team = TeamResponses.query.all()
+    mentor = MentorResponses.query.all()
+    return render_template('admin.html', matches=matches, team=team, mentor=mentor), 200
 
 @admin_bp.route('/', methods=['GET'])
 def reset_hackers():
-    from app.models import Matches
+    from app.models import Matches, TeamResponses, MentorResponses
     matches = Matches.query.all()
-    return render_template('admin.html', matches=matches), 200
+    team = TeamResponses.query.all()
+    mentor = MentorResponses.query.all()
+    return render_template('admin.html', matches=matches, team=team, mentor=mentor), 200
 
 @admin_bp.route('/export_to_csv', methods=['GET'])
 def export_to_csv():

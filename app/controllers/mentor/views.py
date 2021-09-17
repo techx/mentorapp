@@ -29,10 +29,12 @@ def add_mentor(teamID, mentorID):
 
 @mentor_bp.route('/<teamID>', methods=['POST'])
 def update_mentor(teamID):
-    from app.models import Matches
+    from app.models import Matches, MentorResponses
     data = request.form
+    team_email = Matches.query.filter_by(team_id=teamID).first().team_email
     for elem in data:
-        Matches.populate({teamID: data[elem]})
+        mentor_email = MentorResponses.query.filter_by(id=int(data[elem])).first().email
+        Matches.populate({teamID: [data[elem], team_email, mentor_email]})
     matches = Matches.query.all()
     return render_template('admin.html', matches=matches)
 

@@ -1,46 +1,153 @@
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+
+
+<button onclick=matchestable()>Display Matches</button>
+
+<button onclick=mentorstable()>Display Mentor Responses</button>
+
+<button onclick=teamtable()>Display Team Responses</button>
+
+<script>
+  function matchestable() {
+    document.getElementById('matchestable').style.display='block'
+    document.getElementById('mentorstable').style.display='none'
+    document.getElementById('teamtable').style.display='none'
+  }
+
+  function mentorstable() {
+    document.getElementById('matchestable').style.display='none'
+    document.getElementById('mentorstable').style.display='block'
+    document.getElementById('teamtable').style.display='none'
+  }
+
+  function teamtable() {
+    document.getElementById('matchestable').style.display='none'
+    document.getElementById('mentorstable').style.display='none'
+    document.getElementById('teamtable').style.display='block'
+  }
+</script>
+
+
+
+<div id = "teamtable", style="display:none;">
 <table class="table">
     <thead>
       <tr>
         <th scope="col">team id</th>
-        <th scope="col">mentor id</th>
+        <th scope="col">team name</th>
+        <th scope="col">team members</th>
         <th scope="col">team email</th>
-        <th scope="col">mentor email</th>
+        <th scope="col">team commitment</th>
+        <th scope="col">team expertise</th>
+        <th scope="col">virtual?</th>
       </tr>
     </thead>
-      {% for match in matches %}
+      {% for tem in team %}
       <tr>
-      <th scope="row">{{match.team_id}}</th>
-      <td>{{match.mentor_id}}
+      <th scope="row">{{tem.id}}</th>
+      <td>{{tem.name}}
       </td>
       <td>
-        {{match.team_email}}
+        {{tem.members}}
       </td>
       <td>
-        {{match.mentor_email}}
+        {{tem.email}}
       </td>
       <td>
-         <button onclick="document.getElementById('{{match.team_id}}').style.display='block'">Edit</button>
-          <div id="{{match.team_id}}" style="display:none;" class="modal">
-            <div class="modal-content">
-              <span class="spanbutton"
-                onclick="document.getElementById('{{match.team_id}}').style.display='none'">&times;</span>
-              <form action="/mentor/{{match.team_id}}" method="post" id="helo" enctype="application/json"
-                style="display:block;">
-                <b>Team {{match.team_id}}</b><br><br>
-                <label class="formlabel">Mentor Id: </label>
-                <input type="text" name="name"><br><br>
-                <button>submit</button>
-              </form>
-            </div>
-          </div>
+        {{tem.commitment}}
       </td>
       <td>
-        <form action="/mentor/delete/{{match.team_id}}" method="post" id="helo" enctype="application/json">
-            <button>Delete</button>
-        </form>
+        {{tem.interest}}
+      </td>
+      <td>
+        {{tem.virtual}}
       </td>
     </tr>
 	{% endfor %}
 </table>
+</div>
 
     
+
+
+<div id = "matchestable", style="display:block;">
+  <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">team id</th>
+          <th scope="col">mentor id</th>
+          <th scope="col">team email</th>
+          <th scope="col">mentor email</th>
+        </tr>
+      </thead>
+        {% for match in matches %}
+        <tr>
+        <th scope="row">{{match.team_id}}</th>
+        <td>{{match.mentor_id}}
+        </td>
+        <td>
+          {{match.team_email}}
+        </td>
+        <td>
+          {{match.mentor_email}}
+        </td>
+        <td>
+           <button onclick="document.getElementById('{{match.team_id}}').style.display='block'">Edit</button>
+            <div id="{{match.team_id}}" style="display:none;" class="modal">
+              <div class="modal-content">
+                <span class="spanbutton"
+                  onclick="document.getElementById('{{match.team_id}}').style.display='none'">&times;</span>
+                <form action="/mentor/{{match.team_id}}" method="post" id="helo" enctype="application/json"
+                  style="display:block;">
+                  <b>Team {{match.team_id}}</b><br><br>
+                  <label class="formlabel">Mentor Id: </label>
+                  <input type="text" name="name"><br><br>
+                  <button>submit</button>
+                </form>
+              </div>
+            </div>
+        </td>
+        <td>
+          <form action="/mentor/delete/{{match.team_id}}" method="post" id="helo" enctype="application/json">
+              <button>Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  </div>
+
+
+  <div id = "mentorstable", style="display:none;">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">mentor id</th>
+            <th scope="col">mentor name</th>
+            <th scope="col">mentor email</th>
+            <th scope="col">mentor commitment</th>
+            <th scope="col">mentor expertise</th>
+            <th scope="col">virtual?</th>
+          </tr>
+        </thead>
+          {% for men in mentor %}
+          <tr>
+          <th scope="row">{{men.id}}</th>
+          <td>{{men.name}}
+          </td>
+          <td>
+            {{men.email}}
+          </td>
+          <td>
+            {{men.commitment}}
+          </td>
+          <td>
+            {{men.interest}}
+          </td>
+          <td>
+            {{men.virtual}}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+    </div>
