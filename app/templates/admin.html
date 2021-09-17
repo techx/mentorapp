@@ -130,7 +130,9 @@
           {{match.mentor_email}}
         </td>
         <td>
-           <button onclick="document.getElementById('{{match.team_id}}').style.display='block'">Edit</button>
+          <form>
+            <button style="padding-top:3px; padding-bottom:3px;", onclick="document.getElementById('{{match.team_id}}').style.display='block'">Edit</button>
+          </form>
             <div id="{{match.team_id}}" style="display:none;" class="modal">
               <div class="modal-content">
                 <span class="spanbutton"
@@ -147,7 +149,7 @@
         </td>
         <td>
           <form action="/mentor/delete/{{match.team_id}}" method="post" id="helo" enctype="application/json">
-              <button>Delete</button>
+              <button style="padding-top:3px; padding-bottom:3px;">Delete</button>
           </form>
         </td>
       </tr>
