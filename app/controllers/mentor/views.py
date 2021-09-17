@@ -29,19 +29,23 @@ def add_mentor(teamID, mentorID):
 
 @mentor_bp.route('/<teamID>', methods=['POST'])
 def update_mentor(teamID):
-    from app.models import Matches, MentorResponses
+    from app.models import Matches, MentorResponses, TeamResponses
     data = request.form
     team_email = Matches.query.filter_by(team_id=teamID).first().team_email
     for elem in data:
         mentor_email = MentorResponses.query.filter_by(id=int(data[elem])).first().email
         Matches.populate({teamID: [data[elem], team_email, mentor_email]})
     matches = Matches.query.all()
-    return render_template('admin.html', matches=matches)
+    mentor = MentorResponses.query.all()
+    team = TeamResponses.query.all()
+    return render_template('admin.html', matches=matches, mentor=mentor, team=team)
 
 @mentor_bp.route('/delete/<teamID>', methods=['POST'])
 def delete_mentor(teamID):
-    from app.models import Matches
+    from app.models import Matches, MentorResponses, TeamResponses
     Matches.delete([teamID])
     matches = Matches.query.all()
-    return render_template('admin.html', matches=matches), 200
+    mentor = MentorResponses.query.all()
+    team = TeamResponses.query.all()
+    return render_template('admin.html', matches=matches, mentor=mentor, team=team), 200
 

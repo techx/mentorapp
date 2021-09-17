@@ -6,28 +6,47 @@
             Welcome to our mentor matching app! This app matches mentors to beginner teams based on several factors.
         </div>
         
-        <div class = "center">
-        <form action="/admin/match" method="get" id="helo" enctype="application/json">
-            <button class ="bigbutton">View Current Matches</button>
-        </form>
 
-        <button class = "bigbutton", onclick="document.getElementById('uploadforms').style.display='block'">Upload Forms</button>
-         </div>
-            <div id="uploadforms" style="display:none;" class="modal">
-              <div class="modal-content">
-                <span class="spanbutton"
-                  onclick="document.getElementById('uploadforms').style.display='none'">&times;</span>
-                <form action="/admin/get_responses" method="post" id="helo" enctype="multipart/form-data"
-                  style="display:block;">
-                  <b>Upload Forms</b><br><br>
-                  <label class="formlabel">Mentor File: </label>
-                  <input type="file" name="mentor"><br>
-                  <label class="formlabel">Team File: </label>
-                  <input type="file" name="team"><br><br>
-                  <button>submit</button>
-                </form>
-              </div>
+        
+
+
+
+
+
+        <div class = "center">
+
+          <div class="container" style="display: flex;">
+            <div style="padding-block:2px; padding-left: 3px; padding-right: 3px;">
+              <form action="/admin/match" method="get" id="helo" enctype="application/json">
+                <button class ="bigbutton">View Current Matches</button>
+            </form>
             </div>
+            <div style="padding-block:2px; padding-left: 3px; padding-right: 3px;">
+              <button class = "bigbutton", onclick="document.getElementById('uploadforms').style.display='block'">Upload Forms</button>
+              
+            </div>
+          </div>  
+
+          <div id="uploadforms" style="display:none;" class="modal">
+            <div class="modal-content">
+              <span class="spanbutton"
+                onclick="document.getElementById('uploadforms').style.display='none'">&times;</span>
+              <form action="/admin/get_responses" method="post" id="helo" enctype="multipart/form-data"
+                style="display:block;">
+                <b>Upload Forms</b><br><br>
+                <label class="formlabel">Mentor File: </label>
+                <input type="file" name="mentor"><br>
+                <label class="formlabel">Team File: </label>
+                <input type="file" name="team"><br><br>
+                <button>submit</button>
+              </form>
+            </div>
+          </div>
+        
+
+        
+         </div>
+            
         
     </body>
 </html>
