@@ -13,7 +13,7 @@ def test():
     def send_email(mentor_email, team_email, team_id, mentor_id):
         app.config.from_object(config_settings['production'])
         basedir = os.path.abspath(os.path.dirname(__file__))
-        data_file = os.path.join(basedir, 'email.html')
+        data_file = os.path.join(basedir, 'matching.html')
         HtmlFile = open(data_file, 'r', encoding='utf-8')
         source_code = HtmlFile.read()   
         HtmlFile.close()
@@ -21,7 +21,8 @@ def test():
             "https://api.mailgun.net/v3/my.hackmit.org/messages",
             auth=("api", app.config['MAILGUN_API']),
             data={"from": "HackMIT <mentor@my.hackmit.org>",
-                "to": [mentor_email, team_email],
+                "to": [team_email],
+                "cc": [mentor_email],
                 "subject": "HackMIT <> Beginner-Mentor Pairing!",
                 "html": source_code})
 
